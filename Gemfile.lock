@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    webshotr (0.0.1a)
+    webshooter (0.0.1a)
 
 GEM
   remote: http://rubygems.org/
@@ -11,4 +11,4 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  webshotr!
+  webshooter!

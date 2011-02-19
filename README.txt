@@ -13,6 +13,7 @@ webshooter 'http://www.jedi.be' 'jedi.png' '1024x768'
 - does not handle redirects currently
 - create more configurable options
 - cleanup code
+- only support png
 
 # Inspiration
 
