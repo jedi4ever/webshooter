@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    webshooter (0.0.1a)
+    webshooter (0.0.2a)
 
 GEM
   remote: http://rubygems.org/

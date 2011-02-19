@@ -3,6 +3,8 @@ require 'logger'
 require 'uri'
 
 require 'webshooter/newnsurlrequest'
+require 'webshooter/redirectfollower'
+
 OSX.require_framework 'WebKit'
 
 #Respond to URL not found....
@@ -52,7 +54,6 @@ class WebShotProcessor
       # Replace the window's content @webView with the web @webView
       @window.setContentView(@webView)
       @webView.release
-      puts "its not in the release"
     end
 
     def capture(uri, path, dimensions = "1024x768" )
@@ -61,14 +62,16 @@ class WebShotProcessor
       # Tell the frame to load the URL we want
       @webView.window.setContentSize(snapshot_dimension) 
       @webView.setFrameSize(snapshot_dimension)
+    
+      final_link = RedirectFollower.new(uri).resolve
       
-      myURI = URI.parse(uri)
+      myURI = URI.parse(final_link)
        
       #Allow all https certificates
       NewNSURLRequest.setAllowsAnyHTTPSCertificate_forHost(true,myURI.host)
       
       #puts "Getting ready for the loadRequest"+uri
-      @webView.mainFrame.loadRequest(NewNSURLRequest.requestWithURL(OSX::NSURL.URLWithString(uri)))
+      @webView.mainFrame.loadRequest(NewNSURLRequest.requestWithURL(OSX::NSURL.URLWithString(final_link)))
 
       #
       # Run the main event loop until the frame loads
@@ -82,12 +85,11 @@ class WebShotProcessor
       #OSX.CFRunLoopRun
       #puts "first loop enters here"
       
-      puts "its not in the after upon success"
          
       upon_success do |view| # Capture the content of the view as an image
 
         view.window.orderFront(nil)
-        view.window.display
+        #view.window.display
   
         #puts "-------------------------------------------------"
         #puts "We got success"
