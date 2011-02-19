@@ -4,10 +4,10 @@ This library uses the Webkit Ruby Cocoa library to take headless webshots
 
 ## From within ruby
 require 'webshooter'
-Webshooter.capture("http://www.jedi.be","jedi.png","1024x768")
+Webshooter.capture('http://www.jedi.be','jedi.png','1024x768')
 
 ## As a commandline tool
-webshooter "http://www.jedi.be" "jedi.png" "1024x768"
+webshooter 'http://www.jedi.be' 'jedi.png' '1024x768'
 
 # Limitations
 - does not handle redirects currently
