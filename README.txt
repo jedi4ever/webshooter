@@ -1,5 +1,8 @@
 This library uses the Webkit Ruby Cocoa library to take headless webshots
 
+# Installation
+gem install webshooter --pre
+
 # Usage 
 
 ## From within ruby
