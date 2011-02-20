@@ -79,6 +79,9 @@ class WebShotProcessor
       #Allow all https certificates
       NewNSURLRequest.setAllowsAnyHTTPSCertificate_forHost(true,myURI.host)
       
+      #Allow handling of cookies
+      #NSURLRequest.setHTTPShouldHandleCookies(true)
+      
       #puts "Getting ready for the loadRequest"+uri
       @webView.mainFrame.loadRequest(NewNSURLRequest.requestWithURL(OSX::NSURL.URLWithString(final_link)))
 

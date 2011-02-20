@@ -17,6 +17,8 @@ Gem::Specification.new do |s|
   s.add_development_dependency "bundler", ">= 1.0.0"
   #s.add_dependency "responsalizr", "~>1.0.2"
   s.add_dependency "nokogiri", "~>1.4.4"
+  s.add_dependency "prawn"
+  s.add_dependency "pdf-writer"
 
   s.files        = `git ls-files`.split("\n")
   s.executables  = `git ls-files`.split("\n").map{|f| f =~ /^bin\/(.*)/ ? $1 : nil}.compact
