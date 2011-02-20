@@ -73,6 +73,8 @@ class WebShotProcessor
       #puts "Getting ready for the loadRequest"+uri
       @webView.mainFrame.loadRequest(NewNSURLRequest.requestWithURL(OSX::NSURL.URLWithString(final_link)))
 
+      #Wait for some pages to terminate
+      sleep 2
       #
       # Run the main event loop until the frame loads
       @timeout=false

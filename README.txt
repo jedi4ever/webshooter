@@ -1,5 +1,9 @@
 This library uses the Webkit Ruby Cocoa library to take headless webshots
 
+# Ruby cocoa working
+- This means it will only work on the system ruby on mac
+- rvm use system (to activate it)
+
 # Installation
 gem install webshooter --pre
 

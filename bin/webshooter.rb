@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 
 
+require 'rubygems'
 require 'webshooter'
 
 module Webshooter
