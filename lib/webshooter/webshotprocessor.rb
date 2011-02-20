@@ -132,7 +132,7 @@ class WebShotProcessor
           view.lockFocus
           bitmap = OSX::NSBitmapImageRep.alloc.initWithFocusedViewRect(view.bounds)
           bitmap.representationUsingType_properties(OSX::NSPNGFileType, nil).writeToFile_atomically(options[:output], true)
-          logger.info( "Webshot for #{final_link} => '#{options[:output]}' ")
+          @logger.info( "Webshot for #{final_link} => '#{options[:output]}' ")
           bitmap.release
           view.unlockFocus
 
