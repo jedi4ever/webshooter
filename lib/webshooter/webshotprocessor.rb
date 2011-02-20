@@ -227,7 +227,7 @@ class WebShotProcessor
       end
 
       def webView_didFailProvisionalLoadWithError_forFrame(webview, load_error, frame)
-        puts "we got a provisional load"
+        #puts "we got a provisional load"
         if (load_error.code == OSX::NSURLErrorCancelled) 
           then
           #pp "WARN: did Fail PROVISIONAL LOAD WITH ERROR For Frame"
