@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    webshooter (0.0.5a)
+    webshooter (0.0.6a)
       nokogiri (~> 1.4.4)
 
 GEM
