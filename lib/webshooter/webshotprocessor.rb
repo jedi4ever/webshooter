@@ -41,7 +41,7 @@ class WebShotProcessor
       @webView.preferences.setAutosaves(false)
       # Set some useful options.
       @webView.preferences.setShouldPrintBackgrounds(true)
-      @webView.preferences.setJavaScriptCanOpenWindowsAutomatically(false)
+      @webView.preferences.setJavaScriptCanOpenWindowsAutomatically(true)
       @webView.preferences.setAllowsAnimatedImages(false)
       # Make sure we don't get a scroll bar.
       @webView.mainFrame.frameView.setAllowsScrolling(false)          
@@ -49,6 +49,7 @@ class WebShotProcessor
       # This @delegate will get a message when the load completes
       @delegate = SimpleLoadDelegate.alloc.init
       @delegate.webshooter = self
+
       @webView.setFrameLoadDelegate(@delegate)
 
       # Replace the window's content @webView with the web @webView
@@ -56,15 +57,23 @@ class WebShotProcessor
       @webView.release
     end
 
-    def capture(uri, path, dimensions = "1024x768" )
+    def capture(uri, options )
       
-      snapshot_dimension=dimensions.split('x')
+      options[:width] ||= 1024
+      options[:height] ||= 768
+      options[:output] ||= "webshot.png" 
+      options[:delay] ||= 2 
+      
+      @delegate.options = options
+           
+      snapshot_dimension=[ options[:width] , options[:height]]
       # Tell the frame to load the URL we want
       @webView.window.setContentSize(snapshot_dimension) 
       @webView.setFrameSize(snapshot_dimension)
     
       final_link = RedirectFollower.new(uri).resolve
       
+      #puts "final link = #{final_link}"
       myURI = URI.parse(final_link)
        
       #Allow all https certificates
@@ -73,8 +82,6 @@ class WebShotProcessor
       #puts "Getting ready for the loadRequest"+uri
       @webView.mainFrame.loadRequest(NewNSURLRequest.requestWithURL(OSX::NSURL.URLWithString(final_link)))
 
-      #Wait for some pages to terminate
-      sleep 2
       #
       # Run the main event loop until the frame loads
       @timeout=false
@@ -93,7 +100,6 @@ class WebShotProcessor
         view.window.orderFront(nil)
         #view.window.display
   
-        #puts "-------------------------------------------------"
         #puts "We got success"
         @docview=view.mainFrame.frameView.documentView
 
@@ -125,7 +131,8 @@ class WebShotProcessor
         if view.bounds.size.height < 300000
           view.lockFocus
           bitmap = OSX::NSBitmapImageRep.alloc.initWithFocusedViewRect(view.bounds)
-          bitmap.representationUsingType_properties(OSX::NSPNGFileType, nil).writeToFile_atomically(path, true)
+          bitmap.representationUsingType_properties(OSX::NSPNGFileType, nil).writeToFile_atomically(options[:output], true)
+          logger.info( "Webshot for #{final_link} => '#{options[:output]}' ")
           bitmap.release
           view.unlockFocus
 
@@ -136,7 +143,7 @@ class WebShotProcessor
       end
 
       upon_failure do |error, logger|
-        logger.warn("Unable to load URI: #{uri} (#{error})")
+        logger.warn("Unable to load URI: #{final_link} (#{error})")
       end
       
       
@@ -166,7 +173,7 @@ class WebShotProcessor
 
     class SimpleLoadDelegate < OSX::NSObject
 
-      attr_accessor :webshooter
+      attr_accessor :webshooter, :options
 
       def stopLoop
         mainLoop=OSX.CFRunLoopGetMain
@@ -176,10 +183,15 @@ class WebShotProcessor
       end
 
       def webView_didFinishLoadForFrame(sender, frame)
+  
         #This did the trick, we have to wait for the right frame to load, not other frames
         if (frame == sender.mainFrame)
           then
           #puts "Finish Load For Frame"
+          #sleep 10
+          #puts "#{  @options[:delay]}"
+          sleep   @options[:delay]
+          #puts "we got a finish"
           @webshooter.load_success = true; 
 
           stopLoop
@@ -189,8 +201,15 @@ class WebShotProcessor
         end
       end
 
+      # keeping track of all content being loaded
+      # http://www.opensubscriber.com/message/webkitsdk-dev@lists.apple.com/2978556.html
+      def webView_didCommitLoadForFrame(sender,frame)
+        #puts "we got a commit"
+      end
+      
       def webView_didFailLoadWithError_forFrame(webview, load_error, frame)
 
+        #puts "we got a failed"
         #This is trick # 2
         #We have to catch this stupid error
         if (load_error.code == OSX::NSURLErrorCancelled) 
@@ -208,6 +227,7 @@ class WebShotProcessor
       end
 
       def webView_didFailProvisionalLoadWithError_forFrame(webview, load_error, frame)
+        puts "we got a provisional load"
         if (load_error.code == OSX::NSURLErrorCancelled) 
           then
           #pp "WARN: did Fail PROVISIONAL LOAD WITH ERROR For Frame"

@@ -11,10 +11,10 @@ gem install webshooter --pre
 
 ## From within ruby
 require 'webshooter'
-Webshooter.capture('http://www.jedi.be','jedi.png','1024x768')
+Webshooter.capture('http://www.jedi.be',{ :output => 'jedi.png', :width => '1024' , :height => '768' , :delay => '2')
 
 ## As a commandline tool
-webshooter 'http://www.jedi.be' 'jedi.png' '1024x768'
+webshooter 'http://www.jedi.be' --width=1024 --height=786 --delay=2 --output=jedi.png
 
 # Limitations
 - does not handle redirects currently
@@ -26,6 +26,10 @@ webshooter 'http://www.jedi.be' 'jedi.png' '1024x768'
 
 This library is a compilation of various parts I found on the web
 The research was done a few years ago, so unfortunatly I don't have all the references anymore
+
+- webkit2png - http://www.paulhammond.org/webkit2png/
+- http://cocoadevblog.com/webkit-screenshots-cocoa-objective-c
+
 
 - Darkroom -  Copyright (c) 2007 Justin Palmer.
   - https://gist.github.com/34824 

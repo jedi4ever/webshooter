@@ -1,0 +1,61 @@
+#!/usr/bin/env ruby
+
+
+require 'rubygems'
+require 'webshooter'
+require 'optparse'
+
+module Webshooter
+  class CLI
+    #Ruby CLI tool - http://rubylearning.com/blog/2011/01/03/how-do-i-make-a-command-line-tool-in-ruby/
+    def self.execute(url,options)
+      webshotr=Webshooter.capture(url,options)
+    end
+  end
+end
+
+options = {}
+parser = OptionParser.new do |opts|
+  opts.banner = "Usage: #$0 [options] URL"
+
+  opts.on('--width=[WIDTH]', Integer, 'Force width of the screenshot') do |v|
+    options[:width] = v
+  end
+
+  opts.on('--delay=[DELAY]', Integer, "Delay") do |v|
+    options[:delay] = v
+  end
+
+  opts.on('--height=[HEIGHT]', Integer, 'Force height of screenshot') do |v|
+    options[:height] = v
+  end
+
+  opts.on('--output=[FILENAME]', String, 'Specify filename for saving') do |v|
+    options[:output] = v
+  end
+
+  opts.on_tail('--help', 'Display this message and exit') do
+    puts opts
+    exit
+  end
+
+  opts.on_tail('-v', "--version", "Show version") do
+    puts "webshooter v"+Webshooter::VERSION
+    exit
+  end
+
+  opts.parse!(ARGV)  
+
+end
+
+if ARGV.size < 1
+  puts "You need to specify the URL as a minimum"
+else
+  uri=ARGV.first
+  if (uri =~ URI::regexp).nil?  
+    puts "You specified an invalid URL"
+  else
+    Webshooter::CLI.execute(uri, options)  
+  end
+
+end

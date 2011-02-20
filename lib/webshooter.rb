@@ -5,9 +5,9 @@ require 'webshooter/webshotprocessor'
 
 module Webshooter
 	class Webshooter
-	  def self.capture(uri, path, dimensions = "1024x768" )
+	  def self.capture(uri, options )
 	    webProcessor=WebShotProcessor.new
-	    webProcessor.capture(uri,path,dimensions)
+	    webProcessor.capture(uri,options)
 	  end
 	end
 end

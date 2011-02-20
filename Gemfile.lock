@@ -2,10 +2,12 @@ PATH
   remote: .
   specs:
     webshooter (0.0.3a)
+      nokogiri (~> 1.4.4)
 
 GEM
   remote: http://rubygems.org/
   specs:
+    nokogiri (1.4.4)
 
 PLATFORMS
   ruby
